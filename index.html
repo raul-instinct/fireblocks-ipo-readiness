@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fireblocks IPO Readiness Dashboard</title>
+<meta name="description" content="Scenario-driven readiness score for a potential Fireblocks IPO in 2027. Real data as of Oct 6, 2026, every number labelled verified or estimate.">
+<style>
+:root{
+  --bg:#070d1a;--bg2:#0b1426;--card:#0f1b30;--card2:#132240;--line:#1f3354;--tx:#e8eefb;--mut:#8a9bbb;--dim:#5d6f93;
+  --cy:#22d3ee;--em:#34d399;--am:#fbbf24;--rd:#fb7185;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:radial-gradient(900px 500px at 85% -10%,#12315a55,transparent),var(--bg);color:var(--tx);font:15px/1.45 var(--sans);overflow-x:hidden;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 14px 60px}
+header{padding:8px 0 14px}
+.eyebrow{font:600 11px var(--mono);letter-spacing:.14em;color:var(--cy);text-transform:uppercase}
+h1{font-size:24px;line-height:1.15;margin:6px 0 6px;letter-spacing:-.02em}
+.sub{color:var(--mut);font-size:13px}
+.notice{margin:12px 0 0;padding:10px 12px;border:1px solid #fbbf2455;background:#fbbf2410;border-radius:10px;color:#f3d98f;font-size:12.5px}
+.notice b{color:var(--am)}
+h2{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:26px 0 10px;display:flex;gap:8px;align-items:center}
+h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.card{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi .l{font:600 10.5px var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+.kpi .v{font:700 28px/1.1 var(--mono);margin:6px 0 4px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:11.5px;color:var(--mut)}
+.kpi:nth-child(4){grid-column:1/-1}
+.kpi.main{grid-column:1/-1;display:flex;gap:14px;align-items:center}
+.gauge{width:128px;flex:none}
+.gauge svg{width:100%;display:block}
+.kpi.main .v{font-size:44px;color:var(--cy)}
+.delta{font:600 12px var(--mono)}
+.up{color:var(--em)}.dn{color:var(--rd)}.flat{color:var(--mut)}
+.badge{display:inline-block;font:700 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:99px;border:1px solid;white-space:nowrap}
+.b-ok{color:var(--em);border-color:#34d39966;background:#34d39914}
+.b-pend{color:var(--cy);border-color:#22d3ee66;background:#22d3ee14}
+.b-watch{color:var(--am);border-color:#fbbf2466;background:#fbbf2414}
+.b-bad{color:var(--rd);border-color:#fb718566;background:#fb718514}
+.b-done{color:var(--mut);border-color:var(--line);background:#ffffff08}
+.tag{font:600 9px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:5px;margin-left:6px;vertical-align:1px}
+.t-v{color:var(--em);background:#34d39918}
+.t-e{color:var(--am);background:#fbbf2418}
+.t-w{color:var(--rd);background:#fb718518}
+.grid2{display:grid;gap:12px}
+.pillar{padding:12px 0;border-top:1px solid var(--line)}
+.pillar:first-child{border-top:0;padding-top:0}
+.ph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pn{font-weight:650;font-size:14px}.pw{color:var(--dim);font:11px var(--mono)}
+.pscore{font:700 20px var(--mono)}
+.bar{height:8px;border-radius:99px;background:#0a1222;margin:8px 0;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .25s}
+.bar u{position:absolute;top:-2px;bottom:-2px;width:2px;background:#ffffff88}
+.ind{font-size:12px;color:var(--mut);padding:3px 0}
+.ind b{color:var(--tx);font-weight:600}
+.radar{width:100%;max-width:420px;margin:0 auto;display:block}
+.legend{display:flex;gap:14px;justify-content:center;font:11px var(--mono);color:var(--mut);margin-top:6px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:3px;margin-right:6px;vertical-align:middle;background:var(--c)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+button{font:600 12px var(--mono);color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;min-height:36px}
+button.on{border-color:var(--cy);color:var(--cy)}
+.sl{padding:10px 0;border-top:1px solid var(--line)}
+.sl:first-of-type{border-top:0}
+.slh{display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;align-items:baseline}
+.slv{font:700 13px var(--mono);color:var(--cy);white-space:nowrap}
+.slh small{display:block;color:var(--dim);font-weight:400;font-size:11px;margin-top:2px}
+input[type=range]{width:100%;margin:10px 0 2px;accent-color:var(--cy);height:28px}
+.slnote{font-size:11.5px;color:var(--mut)}
+.sens .row{display:grid;grid-template-columns:96px 1fr 52px;gap:8px;align-items:center;font-size:11.5px;color:var(--mut);padding:4px 0}
+.sens .tr{height:8px;background:#0a1222;border-radius:4px;position:relative}
+.sens .tr i{position:absolute;top:0;bottom:0;border-radius:4px}
+.sens .tr s{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#ffffff55}
+.sens .n{font:600 11px var(--mono);text-align:right;color:var(--tx)}
+.tl{position:relative;margin-left:8px;padding-left:20px;border-left:2px solid var(--line)}
+.ev{position:relative;padding:0 0 16px}
+.ev::before{content:"";position:absolute;left:-27px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--c,var(--dim))}
+.ev.done::before{background:var(--em);border-color:var(--em)}
+.ev.est::before{border-style:dashed}
+.ev .d{font:600 11px var(--mono);color:var(--cy)}
+.ev .t{font-weight:600;font-size:14px;margin:2px 0}
+.ev .x{font-size:12px;color:var(--mut)}
+.ev.dyn .d{color:var(--am)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filters button{padding:6px 10px;min-height:32px;font-size:11px}
+.rk{padding:10px 0;border-top:1px solid var(--line)}
+.rk:first-child{border-top:0}
+.rkh{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.rkt{font-weight:600;font-size:13.5px}
+.rkm{font:11px var(--mono);color:var(--dim);margin-top:3px}
+.rkx{font-size:12px;color:var(--mut);margin-top:4px}
+.src{font-size:12px;color:var(--mut);padding-left:16px}
+.src li{margin:4px 0;word-break:break-word}
+.src a{color:var(--cy);text-decoration:none}
+.foot{margin-top:24px;font-size:11.5px;color:var(--dim)}
+@media(min-width:760px){
+  h1{font-size:32px}
+  .kpis{grid-template-columns:2fr 1fr 1fr 1fr}
+  .kpi.main{grid-column:auto}.kpi:nth-child(4){grid-column:auto}
+  .kpi .v{font-size:26px}.kpi.main .v{font-size:46px}
+  .grid2{grid-template-columns:1.15fr .85fr}
+  .sensrisk{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+}
+@media(max-width:380px){.kpi.main{flex-direction:column;align-items:flex-start}.gauge{width:150px}.sens .row{grid-template-columns:84px 1fr 46px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">IPO Readiness Tracker &middot; data as of Oct 6, 2026</div>
+  <h1>Fireblocks IPO Readiness</h1>
+  <div class="sub">Four-pillar score toward a potential 2027 listing. Move the sliders to stress-test it. Fireblocks is private and has announced no IPO date.</div>
+  <div class="notice"><b>Read this first.</b> Tags show the quality of every number: <span class="tag t-v">verified</span> = public primary or reputable source, <span class="tag t-e">estimate</span> = my modelling assumption, <span class="tag t-w">weak source</span> = single or low-grade source. The 0-100 score is a judgment model, not a prediction. No S-1 was found in the sources I checked; one aggregator (TechStackIPO) claims Fireblocks already filed and is "public", which contradicts every other source and is not used here.</div>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <div class="kpis" id="kpis"></div>
+</section>
+
+<section>
+  <h2>Pillar breakdown</h2>
+  <div class="grid2">
+    <div class="card"><svg id="radar" class="radar" viewBox="0 0 420 300" role="img" aria-label="Radar chart of four readiness pillars"></svg>
+      <div class="legend"><span style="--c:#ffffff55">Base case</span><span style="--c:var(--cy)">Your scenario</span></div></div>
+    <div class="card" id="pillars"></div>
+  </div>
+</section>
+
+<section>
+  <h2>Scenario &amp; sensitivity analyzer</h2>
+  <div class="card">
+    <div class="presets" id="presets"></div>
+    <div id="sliders"></div>
+  </div>
+  <div class="sensrisk" style="margin-top:12px">
+    <div class="card sens"><div class="l" style="font:600 10.5px var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase;margin-bottom:6px">What moves the score most</div><div class="slnote" style="margin-bottom:6px">Score change if each driver goes from its worst to best setting, others held where they are now.</div><div id="sens"></div></div>
+    <div class="card"><div style="font:600 10.5px var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase;margin-bottom:6px">Model in one paragraph</div><div class="slnote">Each pillar starts from a base score set from the evidence below. Every slider shifts the pillars it touches by up to a fixed number of points, relative to today's reading. Overall score = 20% Macro + 25% Regulatory + 35% Financial + 20% Peers. Projected IPO month = Jan 2027 + (78 - score) x 0.32 months, so a score of 78+ points at early 2027 and each lost point pushes it out about 10 days. The weights, base scores and slopes are my assumptions (estimate), chosen to be easy to argue with.</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Key catalyst timeline 2026-2027</h2>
+  <div class="card"><div class="tl" id="tl"></div>
+  <div class="slnote">Dashed dots and amber dates are modelled from your scenario, not announced. Done items are sourced.</div></div>
+</section>
+
+<section>
+  <h2>Risk &amp; blocker matrix</h2>
+  <div class="card"><div class="filters" id="rf"></div><div id="risks"></div></div>
+</section>
+
+<section>
+  <h2>Sources</h2>
+  <div class="card"><ol class="src" id="srcs"></ol></div>
+  <div class="foot">Built by Instinct for Omri. Not investment advice. Dollar figures for Fireblocks revenue come from third-party aggregators because the company is private and does not publish financials.</div>
+</section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const SRC={
+ fomc:["Fed FOMC statement, Sep 16 2026","https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm"],
+ reut:["Reuters: Fed hikes, projections 4.00-4.25% by end-2026","https://www.reuters.com/business/warshs-words-may-matter-more-than-anticipated-fed-rate-hike-2026-09-16/"],
+ vix:["FRED: VIX close 16.39 on Oct 1 2026","https://fred.stlouisfed.org/series/VIXCLS"],
+ yld:["Strategy Trader: Nasdaq 27,191, 10y at 5.30% (Oct 5; single source)","https://strategytrader.ai/nasdaq-analysis-yields/"],
+ kraken:["Protos: Kraken IPO delayed to at least April 2027","https://protos.com/every-kraken-ipo-plan-has-failed/"],
+ bitgo:["CoinDCX: BitGo is the only crypto-native IPO of 2026 so far","https://coindcx.com/blog/crypto-highlights/crypto-ipos-2025/"],
+ bcom:["Blockchain.com targets $4-6B IPO, down from $14B","https://valueaddvc.com/blog/blockchaincom-ipo-2026-4-6b-valuation-500m-raise"],
+ crcl:["Yahoo Finance: CRCL $84.18, 52-week range 49.90-159.47 (Oct 6)","https://ca.finance.yahoo.com/quote/CRCL/"],
+ crcl2:["Investing.com: Circle IPO priced at $31","https://www.investing.com/analysis/circles-ipo-how-cryptocurrency-became-mainstream-finance-200661905"],
+ tsy:["US Treasury: GENIUS Act NPRM, Aug 17 2026","https://home.treasury.gov/news/press-releases/sb0605"],
+ frn:["Federal Register: Fed Board GENIUS NPRM, comments to Nov 30 2026","https://www.federalregister.gov/documents/2026/09/29/2026-19860/implementing-the-federal-reserve-boards-responsibilities-under-the-genius-act"],
+ occ:["OCC bulletin 2026-3: GENIUS Act NPRM","https://www.occ.gov/news-issuances/bulletins/2026/bulletin-2026-3.html"],
+ eff:["Chapman tracker: effective on earlier of Jan 18 2027 or 120 days after final rules","https://www.chapman.com/assets/htmldocuments/Chapman-GENIUS-Act-Rulemaking-and-Reporting-Tracker-060526.pdf"],
+ ousd:["Forbes: OUSD goes live Sep 30 2026","https://www.forbes.com/sites/gabrielalinzainescu/2026/09/30/ousd-stablecoin-goes-live-with-visa-mastercard-and-stripe-behind-it/"],
+ ousd2:["The Clarity: OUSD launch supply about $468M","https://theclarity.today/story/stripe-s-bridge-launches-ousd-the-stablecoin-that-pays-its-distributors-0f42d60c"],
+ fbblog:["Fireblocks: OUSD post, $76B quarterly B2B stablecoin volume","https://www.fireblocks.com/blog/open-usd-stablecoin-infrastructure-partner"],
+ fbnet:["Fireblocks: Network for Payments, about $300B monthly stablecoin flows","https://www.fireblocks.com/blog/the-fireblocks-network-for-payments-is-here"],
+ fb6t:["Blockchain.News: $6T stablecoin volume in 2025","https://blockchain.news/news/fireblocks-6-trillion-stablecoin-volume-2025-infrastructure"],
+ rev:["StockAnalysis: Fireblocks revenue $124M (annual, private, third-party)","https://stockanalysis.com/private/fireblocks/"],
+ val:["Fireblocks: $550M Series E at $8B valuation (Jan 2022)","https://www.fireblocks.com/blog/550m-series-e-zero-to-crypto"],
+ loss:["AInvest: reported unprofitable (low-grade source)","https://www.ainvest.com/news/fireblocks-bought-nyse-floor-2608/"],
+ chatter:["Curved: 2026 listing chatter, no confirmed process (Jul 2026)","https://curvedtrading.com/articles/en/investing/fireblocks-ipo/"],
+ tres:["Fortune: Fireblocks buys TRES Finance for $130M","https://fortune.com/2026/01/07/fireblocks-tres-finance-acquisition-130-million/"]
+};
+const srcKeys=Object.keys(SRC);
+function cite(k){return `<a href="${SRC[k][1]}" target="_blank" rel="noopener" style="color:var(--cy);text-decoration:none">[${srcKeys.indexOf(k)+1}]</a>`}
+
+/* ---------- model ---------- */
+const PILLARS=[
+ {id:"macro",name:"Macro & Market Conditions",w:.20,base:50,color:"#22d3ee",
+  ind:[["Fed funds 3.75-4.00% after Sep 16 hike; dots 4.00-4.25% by end-2026","v",["fomc","reut"]],
+       ["VIX about 16, low-vol regime; Nasdaq near 27,200","v",["vix","yld"]],
+       ["10-year yield about 5.3% (24-year high per one desk)","w",["yld"]],
+       ["Crypto IPO window selective: BitGo only 2026 listing, Kraken pushed to Apr 2027+","v",["bitgo","kraken"]]]},
+ {id:"reg",name:"Regulatory & Compliance Clarity",w:.25,base:58,color:"#34d399",
+  ind:[["GENIUS Act law since Jul 18 2025; effective on earlier of Jan 18 2027 or 120 days after final rules","v",["eff"]],
+       ["Proposed rules out: Treasury (Aug 17), OCC (Feb), Fed Board (Sep 29). No final rules yet","v",["tsy","occ","frn"]],
+       ["Institutional framework approvals (charters, issuer registrations) still in progress","e",[]]]},
+ {id:"fin",name:"Financial & Operational Traction",w:.35,base:57,color:"#fbbf24",
+  ind:[["2024 revenue $124M; revenue range $100-150M. Past $100M yes, current ARR not disclosed","w",["rev"]],
+       ["Stablecoin flows: about $300B/month on network, $76B/quarter in B2B payments, $6T in 2025","v",["fbnet","fbblog","fb6t"]],
+       ["OUSD live Sep 30 2026 (Stripe default, Visa, Mastercard); launch supply only about $468M","v",["ousd","ousd2"]],
+       ["Diversification via acquisitions (Dynamic, TRES $130M); mix by product not disclosed","e",["tres"]],
+       ["Audit, banker and S-1 readiness: nothing public","e",["chatter"]]]},
+ {id:"peer",name:"Peer Benchmarks & Sentiment",w:.20,base:55,color:"#a78bfa",
+  ind:[["Circle: IPO $31, now about $84, but 47% below its $159 high","v",["crcl","crcl2"]],
+       ["Peer pipeline weak: Blockchain.com cutting target to $4-6B from $14B","v",["bcom"]],
+       ["Institutional adoption strong: Visa, Mastercard, Stripe, BNY on stablecoin rails","v",["ousd"]]]}
+];
+const SL=[
+ {id:"vix",label:"Macro volatility (VIX)",note:"Higher = harder IPO window",min:12,max:45,step:1,base:16,fmt:v=>"VIX "+v,
+  hint:v=>v<=18?"Calm tape, IPOs price":v<=26?"Choppy, deals get delayed":"Risk-off, window shut"},
+ {id:"rate",label:"Fed funds, year-end target (top of range)",note:"FOMC dots: 4.00-4.25%",min:3.5,max:5.5,step:.25,base:4.25,fmt:v=>v.toFixed(2)+"%",
+  hint:v=>v<=4?"Easing resumes":v<=4.5?"On the Fed's current path":"More hikes, growth multiples compress"},
+ {id:"ousd",label:"OUSD adoption on Fireblocks rails",note:"Index, 30 = launch-month pace",min:0,max:100,step:1,base:30,fmt:v=>v+" / 100",
+  hint:v=>v<20?"Stalls after launch":v<45?"Steady ramp":v<75?"Stripe flows migrate fast":"Becomes a core volume driver"},
+ {id:"reg",label:"Regulatory clarity speed",note:"How fast GENIUS final rules land",min:0,max:100,step:1,base:50,fmt:v=>v+" / 100",
+  hint:v=>v<30?"Rules slip past Jan 2027 backstop":v<65?"Finals around the backstop":"Finals by early Dec 2026"},
+ {id:"win",label:"Crypto IPO window (peer deals)",note:"Do Kraken, Blockchain.com etc. price?",min:0,max:100,step:1,base:40,fmt:v=>v+" / 100",
+  hint:v=>v<25?"Shut: more delays":v<55?"Selective, discounted":"Open: peers list on plan"},
+ {id:"arr",label:"ARR growth (YoY)",note:"Estimate: no disclosed figure",min:0,max:40,step:1,base:15,fmt:v=>v+"%",
+  hint:v=>v<10?"Stagnant, hard story":v<22?"Steady":"Hypergrowth, supports premium"}
+];
+const NORM={
+ vix:v=>clamp(-(v-16)/20,-1,.25), rate:v=>clamp(-(v-4.25)/1,-1,1), ousd:v=>clamp((v-30)/50,-.6,1),
+ reg:v=>(v-50)/50, win:v=>clamp((v-40)/60,-.67,1), arr:v=>clamp((v-15)/25,-.6,1)
+};
+const IMPACT={ // points at |norm|=1
+ macro:{vix:22,rate:20,win:8}, reg:{reg:35}, fin:{arr:22,ousd:18,reg:6},
+ peer:{win:28,vix:10,ousd:10}
+};
+const PRESETS={
+ Base:{vix:16,rate:4.25,ousd:30,reg:50,win:40,arr:15},
+ Bull:{vix:14,rate:3.75,ousd:70,reg:90,win:85,arr:30},
+ Bear:{vix:32,rate:5.0,ousd:12,reg:15,win:10,arr:5}
+};
+function pillarScores(s){
+  const o={};
+  PILLARS.forEach(p=>{let x=p.base;for(const k in IMPACT[p.id])x+=IMPACT[p.id][k]*NORM[k](s[k]);o[p.id]=clamp(x,0,100)});
+  return o;
+}
+function overall(ps){return PILLARS.reduce((a,p)=>a+p.w*ps[p.id],0)}
+function monthsOut(sc){return Math.max(.5,(78-sc)*.32)}
+function dateFor(sc){const d=new Date(Date.UTC(2027,0,1));d.setUTCDate(d.getUTCDate()+Math.round(monthsOut(sc)*30.4));return d}
+function qtr(d){const y=d.getUTCFullYear();return y>2027?"2028+":"Q"+(Math.floor(d.getUTCMonth()/3)+1)+" "+y}
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmtD=d=>MON[d.getUTCMonth()]+" "+d.getUTCFullYear();
+function badge(sc){return sc>=65?["On Track","b-ok"]:sc>=45?["Pending","b-pend"]:["Watchlist","b-watch"]}
+function mkt(m){return m>=65?["Favorable","b-ok"]:m>=45?["Neutral","b-pend"]:["Unfavorable","b-bad"]}
+function arrEst(g){return 124*Math.pow(1+g/100,2)}
+
+let S={...PRESETS.Base}, activePreset="Base";
+const baseSc=overall(pillarScores(PRESETS.Base));
+
+/* ---------- renders ---------- */
+function gauge(sc){
+  const r=52,c=Math.PI*r,off=c*(1-sc/100);
+  return `<svg viewBox="0 0 128 76"><path d="M12 66 A52 52 0 0 1 116 66" fill="none" stroke="#0a1222" stroke-width="11" stroke-linecap="round"/>
+  <path d="M12 66 A52 52 0 0 1 116 66" fill="none" stroke="url(#g)" stroke-width="11" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}" style="transition:stroke-dashoffset .3s"/>
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs></svg>`;
+}
+function renderKpis(sc,ps){
+  const d=dateFor(sc),lo=dateFor(sc+7),hi=dateFor(sc-7);
+  const dl=sc-baseSc, dcls=Math.abs(dl)<.5?"flat":dl>0?"up":"dn";
+  const [mt,mc]=mkt(ps.macro), arr=arrEst(S.arr);
+  const lab=sc>=75?"Ready":sc>=60?"On track":sc>=40?"Building":"Early";
+  $("#kpis").innerHTML=`
+  <div class="card kpi main"><div class="gauge">${gauge(sc)}</div><div><div class="l">IPO readiness score</div><div class="v">${Math.round(sc)}%</div>
+   <div class="s"><span class="badge ${badge(sc)[1]}">${lab}</span> <span class="delta ${dcls}">${Math.abs(dl)<.5?"= base case":(dl>0?"+":"")+dl.toFixed(1)+" vs base"}</span></div></div></div>
+  <div class="card kpi"><div class="l">Projected window</div><div class="v">${qtr(d)}</div><div class="s">~${fmtD(d)}<br>range ${qtr(lo)} to ${qtr(hi)}<span class="tag t-e">estimate</span></div></div>
+  <div class="card kpi"><div class="l">Est. ARR / revenue</div><div class="v">$${Math.round(arr)}M</div><div class="s">$124M 2024 revenue ${cite("rev")} grown ${S.arr}%/yr for 2 yrs<span class="tag t-w">weak source</span></div></div>
+  <div class="card kpi"><div class="l">Market conditions</div><div class="v" style="font-size:22px;padding-top:4px"><span class="badge ${mc}" style="font-size:12px;padding:5px 10px">${mt}</span></div><div class="s" style="margin-top:8px">Macro pillar ${Math.round(ps.macro)}/100 &middot; VIX ${S.vix}, Fed ${S.rate.toFixed(2)}%</div></div>`;
+}
+function renderPillars(ps){
+  const base=pillarScores(PRESETS.Base);
+  $("#pillars").innerHTML=PILLARS.map(p=>{
+    const sc=ps[p.id],[bt,bc]=badge(sc);
+    return `<div class="pillar"><div class="ph"><div><div class="pn">${p.name}</div><div class="pw">weight ${Math.round(p.w*100)}%</div></div>
+    <div style="text-align:right"><div class="pscore" style="color:${p.color}">${Math.round(sc)}</div><span class="badge ${bc}">${bt}</span></div></div>
+    <div class="bar"><i style="width:${sc}%;background:${p.color}"></i><u style="left:${base[p.id]}%"></u></div>
+    ${p.ind.map(i=>`<div class="ind">${i[0]}<span class="tag t-${i[1]}">${{v:"verified",e:"estimate",w:"weak source"}[i[1]]}</span> ${i[2].map(cite).join(" ")}</div>`).join("")}</div>`}).join("");
+}
+function renderRadar(ps){
+  const cx=210,cy=150,R=92,ax=PILLARS.map((p,i)=>{const a=-Math.PI/2+i*Math.PI/2;return{a,p}});
+  const pt=(a,v)=>[cx+Math.cos(a)*R*v/100,cy+Math.sin(a)*R*v/100];
+  let g="";
+  [25,50,75,100].forEach(v=>{g+=`<polygon points="${ax.map(x=>pt(x.a,v).join(",")).join(" ")}" fill="none" stroke="#1f3354" stroke-width="1"/>`});
+  ax.forEach(x=>{const [px,py]=pt(x.a,100);g+=`<line x1="${cx}" y1="${cy}" x2="${px}" y2="${py}" stroke="#1f3354"/>`});
+  const base=pillarScores(PRESETS.Base);
+  g+=`<polygon points="${ax.map(x=>pt(x.a,base[x.p.id]).join(",")).join(" ")}" fill="none" stroke="#ffffff66" stroke-dasharray="4 3"/>`;
+  g+=`<polygon points="${ax.map(x=>pt(x.a,ps[x.p.id]).join(",")).join(" ")}" fill="#22d3ee33" stroke="#22d3ee" stroke-width="2" style="transition:all .25s"/>`;
+  const short={macro:"Macro",reg:"Regulatory",fin:"Financial",peer:"Peers"};
+  ax.forEach(x=>{const [px,py]=pt(x.a,ps[x.p.id]);g+=`<circle cx="${px}" cy="${py}" r="4" fill="${x.p.color}"/>`;
+    const [lx,ly]=pt(x.a,118);const anchor=Math.abs(Math.cos(x.a))<.1?"middle":Math.cos(x.a)>0?"start":"end";
+    g+=`<text x="${lx}" y="${ly+4}" text-anchor="${anchor}" fill="#8a9bbb" font-size="11" font-family="ui-monospace,monospace">${short[x.p.id]} ${Math.round(ps[x.p.id])}</text>`});
+  $("#radar").innerHTML=g;
+}
+function renderSens(){
+  const rows=SL.map(sl=>{
+    const lo={...S,[sl.id]:sl.id==="vix"||sl.id==="rate"?sl.max:sl.min}, hi={...S,[sl.id]:sl.id==="vix"||sl.id==="rate"?sl.min:sl.max};
+    const a=overall(pillarScores(lo))-overall(pillarScores(S)), b=overall(pillarScores(hi))-overall(pillarScores(S));
+    return {sl,a,b}}).sort((x,y)=>(y.b-y.a)-(x.b-x.a));
+  const m=Math.max(...rows.map(r=>Math.max(Math.abs(r.a),Math.abs(r.b))),5);
+  $("#sens").innerHTML=rows.map(r=>{
+    const w=v=>Math.abs(v)/m*50;
+    return `<div class="row"><span>${r.sl.label.split(" (")[0].replace("Fed funds, year-end target","Fed funds").replace(" on Fireblocks rails","")}</span><div class="tr"><s></s><i style="right:50%;width:${w(r.a)}%;background:var(--rd)"></i><i style="left:50%;width:${w(r.b)}%;background:var(--em)"></i></div><span class="n">${r.a.toFixed(0)} / +${r.b.toFixed(0)}</span></div>`}).join("");
+}
+function renderTimeline(sc){
+  const ipo=dateFor(sc), add=(d,days)=>{const x=new Date(d);x.setUTCDate(x.getUTCDate()+days);return x};
+  const today=new Date(Date.UTC(2026,9,6));
+  const conf=add(ipo,-190), pub=add(ipo,-60), road=add(ipo,-18);
+  const dyn=(d,t,x)=>({d:fmtD(d<today?today:d)+(d<today?" (already due)":""),t,x,dyn:1});
+  const regDate=S.reg>=65?"Dec 2026":S.reg>=30?"Dec 2026 - Jan 2027":"after Jan 2027";
+  const ev=[
+   {d:"Jan 2022",t:"$550M Series E at $8B valuation",x:"Last priced round; every IPO valuation is judged against it.",st:"done",src:["val"]},
+   {d:"Jun 30, 2026",t:"Open USD (OUSD) announced",x:"Open Standard consortium; Fireblocks named key infrastructure partner.",st:"done",src:["fbblog"]},
+   {d:"Aug 17, 2026",t:"Treasury GENIUS Act proposed rule",x:"Comment period closes Oct 19, 2026.",st:"done",src:["tsy"]},
+   {d:"Sep 16, 2026",t:"Fed raises rates to 3.75-4.00%",x:"First hike since 2023; projections point to 4.00-4.25% by year-end.",st:"done",src:["fomc","reut"]},
+   {d:"Sep 30, 2026",t:"OUSD goes live",x:"Stripe default stablecoin, Visa and Mastercard rails, launch supply about $468M.",st:"done",src:["ousd","ousd2"]},
+   {d:"Oct 19, 2026",t:"Treasury comment deadline",x:"Next hard regulatory date.",st:"next",src:["tsy"]},
+   {d:"Nov 30, 2026",t:"Fed Board GENIUS comment deadline",x:"Final rules after this. Your scenario: "+regDate+".",st:"next",src:["frn"]},
+   {d:"Q4 2026",t:"Bank selection and audit-ready financials",x:"Nothing public. Normal prerequisite, shown as a watch item.",st:"est"},
+   {d:"Jan 18, 2027",t:"GENIUS Act effective-date backstop",x:"Earlier if final rules land 120 days before.",st:"next",src:["eff"]},
+   {...dyn(conf,"Confidential draft S-1 (modelled)","About 6 months before pricing. Not reported as filed."),st:"est"},
+   {d:"Apr 2027+",t:"Kraken IPO now pushed to this window",x:"Peer read-through for the whole sector.",st:"next",src:["kraken"]},
+   {...dyn(pub,"Public S-1 flip (modelled)","Public at least 15 days before the roadshow."),st:"est"},
+   {...dyn(road,"Roadshow (modelled)","About 2 to 3 weeks before pricing."),st:"est"},
+   {...dyn(ipo,"Expected IPO (modelled)","Moves with the sliders. "+qtr(ipo)+" in this scenario."),st:"est"}
+  ];
+  $("#tl").innerHTML=ev.map(e=>{
+    const b=e.st==="done"?'<span class="badge b-done">Done</span>':e.st==="next"?'<span class="badge b-pend">Pending</span>':'<span class="badge b-watch">Watchlist</span>';
+    return `<div class="ev ${e.st==="done"?"done":e.st==="est"?"est":""} ${e.dyn?"dyn":""}" style="--c:${e.st==="est"?"var(--am)":"var(--cy)"}"><div class="d">${e.d}</div><div class="t">${e.t} ${b}</div><div class="x">${e.x} ${(e.src||[]).map(cite).join(" ")}${e.st==="est"?'<span class="tag t-e">estimate</span>':""}</div></div>`}).join("");
+}
+const RISKS=[
+ {c:"Macro",t:"Rates keep rising",i:"High",l:"Medium",x:"Fed already hiked Sep 16 and signals more; 10-year near 5.3%. Growth multiples compress.",s:["fomc","yld"],e:"v"},
+ {c:"Market",t:"Crypto IPO window stays shut",i:"High",l:"High",x:"Only BitGo listed in 2026. Kraken slipped to Apr 2027 or later. Blockchain.com cut its target by more than half.",s:["bitgo","kraken","bcom"],e:"v"},
+ {c:"Market",t:"Valuation reset below the $8B 2022 mark",i:"High",l:"Medium",x:"Last priced round is 4+ years old. Revenue near $124M implies a high multiple to clear $8B.",s:["val","rev"],e:"w"},
+ {c:"Regulatory",t:"GENIUS final rules slip past Jan 18 2027",i:"Medium",l:"Medium",x:"No final rules yet; Fed comments run to Nov 30. The Act still takes effect Jan 18 2027 on its own.",s:["eff","frn"],e:"v"},
+ {c:"Audit",t:"Audit and S-1 prep timeline",i:"Medium",l:"Unknown",x:"No public signal on auditor, banks or filing. A typical confidential-to-pricing path takes months.",s:[],e:"e"},
+ {c:"Financial",t:"Profitability and growth story",i:"Medium",l:"Medium",x:"Reported unprofitable by a low-grade source; no audited 2025 or 2026 numbers are public.",s:["loss"],e:"w"},
+ {c:"Financial",t:"OUSD volume stays small",i:"Low",l:"Medium",x:"Launch supply about $468M, tiny next to Stripe's volume. Upside if flows migrate, little downside to the base business.",s:["ousd2"],e:"v"},
+ {c:"Financial",t:"Revenue diversification",i:"Medium",l:"Medium",x:"Custody and wallet fees still core. Acquisitions (Dynamic, TRES) broaden the mix but are not yet visible in revenue.",s:["tres"],e:"e"},
+ {c:"Peers",t:"Circle-style volatility",i:"Medium",l:"High",x:"CRCL is 47% below its high; public investors may price stablecoin infrastructure cautiously.",s:["crcl"],e:"v"},
+ {c:"Security",t:"Security incident or outage",i:"High",l:"Low",x:"Trust is the product. A breach before listing would stall everything.",s:[],e:"e"}
+];
+let rfilter="All";
+function renderRisks(){
+  const cats=["All",...new Set(RISKS.map(r=>r.c))], ord={High:0,Medium:1,Low:2};
+  $("#rf").innerHTML=cats.map(c=>`<button class="${c===rfilter?"on":""}" data-c="${c}">${c}</button>`).join("");
+  $("#rf").querySelectorAll("button").forEach(b=>b.onclick=()=>{rfilter=b.dataset.c;renderRisks()});
+  $("#risks").innerHTML=RISKS.filter(r=>rfilter==="All"||r.c===rfilter).sort((a,b)=>ord[a.i]-ord[b.i]).map(r=>{
+    const bc=r.i==="High"?"b-bad":r.i==="Medium"?"b-watch":"b-ok";
+    return `<div class="rk"><div class="rkh"><div class="rkt">${r.t}</div><span class="badge ${bc}">${r.i} impact</span></div>
+    <div class="rkm">${r.c} &middot; likelihood: ${r.l}</div><div class="rkx">${r.x} ${r.s.map(cite).join(" ")}<span class="tag t-${r.e}">${{v:"verified",e:"estimate",w:"weak source"}[r.e]}</span></div></div>`}).join("");
+}
+function renderSliders(){
+  $("#presets").innerHTML=Object.keys(PRESETS).map(k=>`<button data-p="${k}" class="${k===activePreset?"on":""}">${k==="Base"?"Base case":k==="Bull"?"Bull case":"Bear case"}</button>`).join("");
+  $("#presets").querySelectorAll("button").forEach(b=>b.onclick=()=>{S={...PRESETS[b.dataset.p]};activePreset=b.dataset.p;syncSliders();update()});
+  $("#sliders").innerHTML=SL.map(sl=>`<div class="sl"><div class="slh"><div>${sl.label}<small>${sl.note}</small></div><div class="slv" id="v-${sl.id}"></div></div>
+    <input type="range" id="r-${sl.id}" min="${sl.min}" max="${sl.max}" step="${sl.step}" aria-label="${sl.label}"><div class="slnote" id="h-${sl.id}"></div></div>`).join("");
+  SL.forEach(sl=>$("#r-"+sl.id).addEventListener("input",e=>{S[sl.id]=parseFloat(e.target.value);activePreset="";document.querySelectorAll("#presets button").forEach(b=>b.classList.remove("on"));update()}));
+  syncSliders();
+}
+function syncSliders(){
+  SL.forEach(sl=>{$("#r-"+sl.id).value=S[sl.id]});
+  document.querySelectorAll("#presets button").forEach(b=>b.classList.toggle("on",b.dataset.p===activePreset));
+}
+function update(){
+  const ps=pillarScores(S),sc=overall(ps);
+  SL.forEach(sl=>{$("#v-"+sl.id).textContent=sl.fmt(S[sl.id]);$("#h-"+sl.id).textContent=sl.hint(S[sl.id])});
+  renderKpis(sc,ps);renderPillars(ps);renderRadar(ps);renderSens();renderTimeline(sc);
+}
+$("#srcs").innerHTML=srcKeys.map(k=>`<li><a href="${SRC[k][1]}" target="_blank" rel="noopener">${SRC[k][0]}</a></li>`).join("");
+renderSliders();renderRisks();update();
+</script>
+</body>
+</html>
